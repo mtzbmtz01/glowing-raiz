@@ -1,0 +1,18 @@
+{
+  "name": "raiz-dating-app",
+  "version": "1.0.0",
+  "description": "Full-stack dating application",
+  "scripts": {
+    "backend:install": "cd backend && npm install",
+    "mobile:install": "cd mobile && npm install",
+    "install:all": "npm run backend:install && npm run mobile:install",
+    "backend:dev": "cd backend && npm run dev",
+    "mobile:dev": "cd mobile && npm start",
+    "backend:build": "cd backend && npm run build",
+    "prisma:generate": "cd backend && npm run prisma:generate",
+    "prisma:migrate": "cd backend && npm run prisma:migrate"
+  },
+  "keywords": ["dating", "react-native", "nodejs", "express", "socket.io"],
+  "author": "",
+  "license": "MIT"
+}
