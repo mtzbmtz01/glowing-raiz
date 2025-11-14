@@ -1,0 +1,196 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AuthProvider {
+  EMAIL
+  APPLE
+  GOOGLE
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  NON_BINARY
+  OTHER
+}
+
+enum Orientation {
+  STRAIGHT
+  GAY
+  LESBIAN
+  BISEXUAL
+  PANSEXUAL
+  ASEXUAL
+  OTHER
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  DELETED
+}
+
+model User {
+  id            String       @id @default(uuid())
+  email         String       @unique
+  passwordHash  String?
+  authProvider  AuthProvider @default(EMAIL)
+  appleId       String?      @unique
+  googleId      String?      @unique
+  status        UserStatus   @default(ACTIVE)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  lastActiveAt  DateTime     @default(now())
+
+  // Relations
+  profile         Profile?
+  sessions        Session[]
+  sentMessages    Message[]     @relation("SentMessages")
+  receivedMessages Message[]    @relation("ReceivedMessages")
+  blockedUsers    Block[]       @relation("BlockedBy")
+  blockedBy       Block[]       @relation("BlockedUser")
+  reports         Report[]      @relation("Reporter")
+  reportedBy      Report[]      @relation("ReportedUser")
+  matchesInitiated Match[]      @relation("MatchInitiator")
+  matchesReceived  Match[]      @relation("MatchReceiver")
+
+  @@index([email])
+  @@index([status])
+}
+
+model Profile {
+  id               String       @id @default(uuid())
+  userId           String       @unique
+  displayName      String
+  bio              String?      @db.Text
+  age              Int
+  gender           Gender
+  orientation      Orientation
+  interests        String[]     // Array of interests
+  
+  // Location
+  latitude         Float?
+  longitude        Float?
+  locationUpdatedAt DateTime?
+  
+  // Preferences
+  searchRadius     Int          @default(25) // miles
+  minAge           Int          @default(18)
+  maxAge           Int          @default(99)
+  genderPreference Gender[]
+  
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  // Relations
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  photos  Photo[]
+
+  @@index([latitude, longitude])
+  @@index([userId])
+}
+
+model Photo {
+  id         String   @id @default(uuid())
+  profileId  String
+  url        String
+  key        String   // S3 key
+  order      Int      @default(0)
+  isProfile  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  // Relations
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@index([profileId])
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  userId       String
+  token        String   @unique
+  refreshToken String?  @unique
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([token])
+}
+
+model Message {
+  id         String   @id @default(uuid())
+  senderId   String
+  receiverId String
+  content    String   @db.Text
+  isRead     Boolean  @default(false)
+  readAt     DateTime?
+  createdAt  DateTime @default(now())
+
+  // Relations
+  sender   User @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver User @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@index([senderId])
+  @@index([receiverId])
+  @@index([createdAt])
+}
+
+model Block {
+  id         String   @id @default(uuid())
+  blockerId  String
+  blockedId  String
+  createdAt  DateTime @default(now())
+
+  // Relations
+  blocker User @relation("BlockedBy", fields: [blockerId], references: [id], onDelete: Cascade)
+  blocked User @relation("BlockedUser", fields: [blockedId], references: [id], onDelete: Cascade)
+
+  @@unique([blockerId, blockedId])
+  @@index([blockerId])
+  @@index([blockedId])
+}
+
+model Report {
+  id         String   @id @default(uuid())
+  reporterId String
+  reportedId String
+  reason     String   @db.Text
+  createdAt  DateTime @default(now())
+  resolved   Boolean  @default(false)
+  resolvedAt DateTime?
+
+  // Relations
+  reporter User @relation("Reporter", fields: [reporterId], references: [id], onDelete: Cascade)
+  reported User @relation("ReportedUser", fields: [reportedId], references: [id], onDelete: Cascade)
+
+  @@index([reporterId])
+  @@index([reportedId])
+  @@index([resolved])
+}
+
+model Match {
+  id           String   @id @default(uuid())
+  initiatorId  String
+  receiverId   String
+  createdAt    DateTime @default(now())
+
+  // Relations
+  initiator User @relation("MatchInitiator", fields: [initiatorId], references: [id], onDelete: Cascade)
+  receiver  User @relation("MatchReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@unique([initiatorId, receiverId])
+  @@index([initiatorId])
+  @@index([receiverId])
+}
