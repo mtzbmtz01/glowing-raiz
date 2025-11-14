@@ -40,11 +40,19 @@ export class ProfileController {
         return;
       }
       
+      // Validate and sanitize gender filter against whitelist
+      // This parameter is validated against a fixed list of allowed values
+      const genderParam = req.query.gender as string | undefined;
+      const validGenders = ['male', 'female', 'other'];
+      const gender = genderParam && validGenders.includes(genderParam) 
+        ? genderParam 
+        : undefined;
+      
       const filters = {
         maxDistance: req.query.maxDistance ? Number(req.query.maxDistance) : undefined,
         minAge: req.query.minAge ? Number(req.query.minAge) : undefined,
         maxAge: req.query.maxAge ? Number(req.query.maxAge) : undefined,
-        gender: req.query.gender as string | undefined,
+        gender,
       };
       
       const users = await ProfileService.getNearbyUsers(req.userId, filters);
