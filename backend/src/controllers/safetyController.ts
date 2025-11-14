@@ -90,7 +90,7 @@ export const getBlockedUsers = async (req: AuthRequest, res: Response) => {
     });
     
     const blockedUsers = blocks.map(block => {
-      const { password, ...userWithoutPassword } = block.blocked;
+      const { password: _password, ...userWithoutPassword } = block.blocked;
       return userWithoutPassword;
     });
     

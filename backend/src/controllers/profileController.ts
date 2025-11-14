@@ -108,7 +108,7 @@ export const getUserProfile = async (req: AuthRequest, res: Response) => {
       return res.status(404).json({ error: 'User not found' });
     }
     
-    const { password, ...userWithoutPassword } = user;
+    const { password: _password, ...userWithoutPassword } = user;
     res.json(userWithoutPassword);
   } catch (error) {
     console.error('Get user profile error:', error);

@@ -64,7 +64,7 @@ export const register = async (req: Request, res: Response) => {
     });
     
     // Remove password from response
-    const { password, ...userWithoutPassword } = user;
+    const { password: _password, ...userWithoutPassword } = user;
     
     res.status(201).json({
       token,
@@ -123,7 +123,7 @@ export const login = async (req: Request, res: Response) => {
     });
     
     // Remove password from response
-    const { password, ...userWithoutPassword } = user;
+    const { password: _password2, ...userWithoutPassword } = user;
     
     res.json({
       token,
@@ -151,7 +151,7 @@ export const getMe = async (req: Request & { userId?: string }, res: Response) =
       return res.status(404).json({ error: 'User not found' });
     }
     
-    const { password, ...userWithoutPassword } = user;
+    const { password: _password3, ...userWithoutPassword } = user;
     res.json(userWithoutPassword);
   } catch (error) {
     console.error('Get me error:', error);

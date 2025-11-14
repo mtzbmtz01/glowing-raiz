@@ -24,7 +24,7 @@ export const getAllUsers = async (req: AuthRequest, res: Response) => {
     ]);
     
     const usersWithoutPasswords = users.map(user => {
-      const { password, ...userWithoutPassword } = user;
+      const { password: _password, ...userWithoutPassword } = user;
       return userWithoutPassword;
     });
     
@@ -50,7 +50,7 @@ export const suspendUser = async (req: AuthRequest, res: Response) => {
       include: { profile: true },
     });
     
-    const { password, ...userWithoutPassword } = user;
+    const { password: _password2, ...userWithoutPassword } = user;
     res.json(userWithoutPassword);
   } catch (error) {
     console.error('Suspend user error:', error);
@@ -68,7 +68,7 @@ export const activateUser = async (req: AuthRequest, res: Response) => {
       include: { profile: true },
     });
     
-    const { password, ...userWithoutPassword } = user;
+    const { password: _password3, ...userWithoutPassword } = user;
     res.json(userWithoutPassword);
   } catch (error) {
     console.error('Activate user error:', error);

@@ -67,7 +67,7 @@ export const getNearbyUsers = async (req: AuthRequest, res: Response) => {
       .sort((a, b) => a.distance - b.distance)
       .slice(0, 50) // Return top 50 closest users
       .map(item => {
-        const { password, ...userWithoutPassword } = item.user;
+        const { password: _password, ...userWithoutPassword } = item.user;
         return {
           ...userWithoutPassword,
           distance: Math.round(item.distance * 10) / 10, // Round to 1 decimal

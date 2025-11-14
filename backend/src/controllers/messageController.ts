@@ -121,7 +121,7 @@ export const getConversations = async (req: AuthRequest, res: Response) => {
         
         if (!partner) return null;
         
-        const { password, ...partnerWithoutPassword } = partner;
+        const { password: _password, ...partnerWithoutPassword } = partner;
         
         return {
           partner: partnerWithoutPassword,
