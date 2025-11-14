@@ -1,0 +1,19 @@
+{
+  "name": "glowing-raiz",
+  "version": "1.0.0",
+  "description": "raiz dating app",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node src/server.js",
+    "test": "node tests/run-tests.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "express": "^5.1.0",
+    "uuid": "^13.0.0"
+  }
+}
