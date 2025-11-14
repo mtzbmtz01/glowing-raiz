@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: raiz_postgres
+    environment:
+      POSTGRES_USER: raiz
+      POSTGRES_PASSWORD: raiz_password
+      POSTGRES_DB: raiz_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U raiz"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: raiz_backend
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://raiz:raiz_password@postgres:5432/raiz_db?schema=public
+      JWT_SECRET: your-jwt-secret-change-in-production
+      PORT: 3000
+      FRONTEND_URL: http://localhost:19006
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    command: npm run dev
+
+volumes:
+  postgres_data:
