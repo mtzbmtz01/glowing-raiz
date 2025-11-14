@@ -1,0 +1,17 @@
+{
+  "name": "glowing-raiz",
+  "version": "1.0.0",
+  "description": "Raiz dating app with tiered subscription system",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"No tests specified\" && exit 0",
+    "lint": "echo \"No linting configured\" && exit 0"
+  },
+  "keywords": [
+    "dating",
+    "subscription",
+    "raiz"
+  ],
+  "author": "",
+  "license": "ISC"
+}
