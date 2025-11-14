@@ -155,7 +155,7 @@ const UserProfileScreen = ({ route, navigation }: any) => {
 
           <View style={styles.secondaryActions}>
             <TouchableOpacity style={styles.iconButton} onPress={handleBlock}>
-              <Ionicons name="ban-outline" size={24} color="#666" />
+              <Ionicons name="close-circle-outline" size={24} color="#666" />
             </TouchableOpacity>
             <TouchableOpacity style={styles.iconButton} onPress={handleReport}>
               <Ionicons name="flag-outline" size={24} color="#666" />

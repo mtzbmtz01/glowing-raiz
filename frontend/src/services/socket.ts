@@ -5,7 +5,7 @@ const SOCKET_URL = process.env.EXPO_PUBLIC_SOCKET_URL || 'http://localhost:3000'
 
 class SocketService {
   private socket: Socket | null = null;
-  private listeners: Map<string, Function[]> = new Map();
+  private listeners: Map<string, ((...args: any[]) => void)[]> = new Map();
 
   async connect() {
     const token = await AsyncStorage.getItem('token');
@@ -47,18 +47,18 @@ class SocketService {
     }
   }
 
-  on(event: string, callback: Function) {
+  on(event: string, callback: (...args: any[]) => void) {
     if (!this.listeners.has(event)) {
       this.listeners.set(event, []);
     }
     this.listeners.get(event)?.push(callback);
 
     if (this.socket) {
-      this.socket.on(event, callback as any);
+      this.socket.on(event, callback);
     }
   }
 
-  off(event: string, callback?: Function) {
+  off(event: string, callback?: (...args: any[]) => void) {
     if (callback) {
       const callbacks = this.listeners.get(event);
       if (callbacks) {
@@ -67,7 +67,7 @@ class SocketService {
           callbacks.splice(index, 1);
         }
       }
-      this.socket?.off(event, callback as any);
+      this.socket?.off(event, callback);
     } else {
       this.listeners.delete(event);
       this.socket?.off(event);
