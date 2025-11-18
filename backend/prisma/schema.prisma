@@ -1,0 +1,144 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum Orientation {
+  STRAIGHT
+  GAY
+  LESBIAN
+  BISEXUAL
+  OTHER
+}
+
+enum AuthProvider {
+  EMAIL
+  GOOGLE
+  APPLE
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  DELETED
+}
+
+enum ReportReason {
+  INAPPROPRIATE_CONTENT
+  HARASSMENT
+  SPAM
+  FAKE_PROFILE
+  UNDERAGE
+  OTHER
+}
+
+model User {
+  id            String        @id @default(uuid())
+  email         String        @unique
+  password      String?       // null for OAuth users
+  authProvider  AuthProvider  @default(EMAIL)
+  status        UserStatus    @default(ACTIVE)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  lastActive    DateTime      @default(now())
+  
+  profile       Profile?
+  sentMessages  Message[]     @relation("SentMessages")
+  receivedMessages Message[]  @relation("ReceivedMessages")
+  blockedUsers  Block[]       @relation("Blocker")
+  blockedBy     Block[]       @relation("Blocked")
+  reports       Report[]      @relation("Reporter")
+  reportedBy    Report[]      @relation("Reported")
+  
+  @@index([email])
+  @@index([status])
+}
+
+model Profile {
+  id            String    @id @default(uuid())
+  userId        String    @unique
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  name          String
+  bio           String?
+  age           Int
+  gender        Gender
+  orientation   Orientation
+  photos        String[]  // Array of photo URLs
+  interests     String[]
+  
+  // Location
+  latitude      Float?
+  longitude     Float?
+  locationUpdatedAt DateTime?
+  
+  // Preferences
+  preferredGender       Gender[]
+  preferredMinAge       Int       @default(18)
+  preferredMaxAge       Int       @default(99)
+  preferredMaxDistance  Float     @default(50.0) // in km
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  @@index([userId])
+  @@index([latitude, longitude])
+}
+
+model Message {
+  id          String    @id @default(uuid())
+  senderId    String
+  receiverId  String
+  content     String
+  seen        Boolean   @default(false)
+  seenAt      DateTime?
+  createdAt   DateTime  @default(now())
+  
+  sender      User      @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver    User      @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+  
+  @@index([senderId, receiverId])
+  @@index([receiverId, seen])
+  @@index([createdAt])
+}
+
+model Block {
+  id          String    @id @default(uuid())
+  blockerId   String
+  blockedId   String
+  createdAt   DateTime  @default(now())
+  
+  blocker     User      @relation("Blocker", fields: [blockerId], references: [id], onDelete: Cascade)
+  blocked     User      @relation("Blocked", fields: [blockedId], references: [id], onDelete: Cascade)
+  
+  @@unique([blockerId, blockedId])
+  @@index([blockerId])
+  @@index([blockedId])
+}
+
+model Report {
+  id          String       @id @default(uuid())
+  reporterId  String
+  reportedId  String
+  reason      ReportReason
+  description String?
+  resolved    Boolean      @default(false)
+  createdAt   DateTime     @default(now())
+  
+  reporter    User         @relation("Reporter", fields: [reporterId], references: [id], onDelete: Cascade)
+  reported    User         @relation("Reported", fields: [reportedId], references: [id], onDelete: Cascade)
+  
+  @@index([reporterId])
+  @@index([reportedId])
+  @@index([resolved])
+}
