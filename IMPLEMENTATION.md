@@ -172,7 +172,7 @@ const comparisonTable = SettingsUpgrade.getComparisonTable();
 ### E. Post-Match Upsell
 **Trigger:** After getting a match, especially when at limits
 
-**Message:** "Matches like this happen more when you're at the top of the grid. Try Raiz Plus."
+**Message:** Matches like this happen more when you're at the top of the grid. Try Raiz Plus.
 
 **Implementation:**
 ```javascript
