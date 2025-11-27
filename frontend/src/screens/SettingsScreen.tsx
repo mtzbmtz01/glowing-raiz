@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-const SettingsScreen = ({ navigation }: any) => {
+const SettingsScreen = ({ navigation: _navigation }: any) => {
   const settingsOptions = [
     {
       title: 'Edit Profile',

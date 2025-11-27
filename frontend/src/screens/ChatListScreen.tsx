@@ -28,7 +28,7 @@ const ChatListScreen = ({ navigation }: any) => {
     };
   }, []);
 
-  const handleNewMessage = (message: any) => {
+  const handleNewMessage = (_message: any) => {
     // Refresh conversations when a new message arrives
     fetchConversations();
   };

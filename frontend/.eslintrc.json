@@ -7,8 +7,7 @@
   "plugins": ["@typescript-eslint"],
   "env": {
     "browser": true,
-    "es6": true,
-    "react-native/react-native": true
+    "es6": true
   },
   "ignorePatterns": ["node_modules/", ".expo/", "web-build/"],
   "rules": {
