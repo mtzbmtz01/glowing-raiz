@@ -17,7 +17,7 @@ class User {
     return this.premiumTier === 'premium';
   }
 
-  hasActiveBooost() {
+  hasActiveBoost() {
     const now = new Date();
     return this.boosts.some(boost => 
       boost.active && 

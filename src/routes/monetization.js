@@ -22,6 +22,11 @@ router.post('/boost', (req, res) => {
     return res.status(400).json({ error: 'Duration must be between 10 and 180 minutes' });
   }
   
+  const user = userService.getUser(userId);
+  if (!user) {
+    return res.status(404).json({ error: 'User not found' });
+  }
+  
   const result = monetizationService.purchaseBoost(userId, duration);
   res.json(result);
 });
@@ -60,6 +65,11 @@ router.post('/highlight', (req, res) => {
     return res.status(400).json({ error: 'Duration must be between 1 and 168 hours (1 week)' });
   }
   
+  const user = userService.getUser(userId);
+  if (!user) {
+    return res.status(404).json({ error: 'User not found' });
+  }
+  
   const result = monetizationService.purchaseHighlight(userId, duration);
   res.json(result);
 });
@@ -96,6 +106,11 @@ router.post('/premium', (req, res) => {
   
   if (!['monthly', 'yearly'].includes(subscriptionPlan)) {
     return res.status(400).json({ error: 'Plan must be either "monthly" or "yearly"' });
+  }
+  
+  const user = userService.getUser(userId);
+  if (!user) {
+    return res.status(404).json({ error: 'User not found' });
   }
   
   const result = monetizationService.purchasePremium(userId, subscriptionPlan);

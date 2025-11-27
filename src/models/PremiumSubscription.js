@@ -12,7 +12,7 @@ class PremiumSubscription {
   }
 
   calculateEndDate(plan) {
-    const startDate = new Date();
+    const startDate = new Date(this.startDate);
     if (plan === 'monthly') {
       return new Date(startDate.setMonth(startDate.getMonth() + 1));
     } else if (plan === 'yearly') {
