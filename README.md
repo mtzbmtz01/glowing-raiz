@@ -1,170 +1,257 @@
-# Glowing Raiz Dating App
+# Raiz - Dating App
 
-A modern dating app with comprehensive monetization features.
+A modern dating app built with React Native (Expo) and Node.js, similar to popular dating platforms but tailored for heterosexual users.
 
 ## Features
 
-### 🚀 Premium Boosts
-Increase your profile visibility for a limited time to get more matches!
-- Flexible duration (10-180 minutes)
-- $1.00 per 10 minutes
-- Instant activation
-- Multiple boosts available
+### Authentication
+- Email + Password authentication
+- Apple Sign-In integration
+- Google OAuth integration
+- JWT-based secure sessions
 
-### 💎 Premium Subscription (Unlimited Likes)
-Upgrade to Premium and never worry about like limits again!
-- **Free Users**: 10 likes per 24 hours
-- **Premium Users**: Unlimited likes
-- Monthly plan: $9.99/month
-- Yearly plan: $99.99/year (save 17%)
+### User Profiles
+- Photo gallery support
+- Bio and interests
+- Age, gender, and orientation settings
+- Customizable preferences (gender, distance, age range)
 
-### ⭐ Profile Highlights
-Feature your profile prominently to stand out from the crowd!
-- Flexible duration (1-168 hours)
-- $2.00 per 24 hours
-- Enhanced visibility
-- Premium placement
+### Discovery
+- Location-based grid view of nearby users
+- Real-time distance calculation
+- Filter by preferences
+- Swipe through user profiles
 
-## Installation
+### Messaging
+- Real-time 1:1 chat powered by Socket.IO
+- Typing indicators
+- Message seen/read receipts
+- Conversation history
 
-```bash
-# Clone the repository
-git clone https://github.com/mtzbmtz01/glowing-raiz.git
-cd glowing-raiz
+### Safety Features
+- Block users
+- Report inappropriate content or behavior
+- Multiple report categories
 
-# Install dependencies
-npm install
+### Admin Dashboard
+- View all users
+- Suspend/activate user accounts
+- Review reports
+- Platform statistics
 
-# Start the server
-npm start
-```
+## Tech Stack
 
-The server will start on http://localhost:3000
+### Backend
+- **Runtime**: Node.js
+- **Framework**: Express.js
+- **Database**: PostgreSQL
+- **ORM**: Prisma
+- **Real-time**: Socket.IO
+- **Authentication**: JWT
+- **Language**: TypeScript
 
-## Usage
-
-### Starting the Server
-
-```bash
-npm start
-```
-
-### Running Tests
-
-```bash
-npm test
-```
-
-## API Examples
-
-### Create a User
-
-```bash
-curl -X POST http://localhost:3000/api/users \
-  -H "Content-Type: application/json" \
-  -d '{"username": "john_doe", "email": "john@example.com"}'
-```
-
-### Purchase a Premium Boost
-
-```bash
-curl -X POST http://localhost:3000/api/monetization/boost \
-  -H "Content-Type: application/json" \
-  -d '{"userId": "your-user-id", "durationMinutes": 30}'
-```
-
-### Upgrade to Premium (Unlimited Likes)
-
-```bash
-curl -X POST http://localhost:3000/api/monetization/premium \
-  -H "Content-Type: application/json" \
-  -d '{"userId": "your-user-id", "plan": "monthly"}'
-```
-
-### Purchase a Profile Highlight
-
-```bash
-curl -X POST http://localhost:3000/api/monetization/highlight \
-  -H "Content-Type: application/json" \
-  -d '{"userId": "your-user-id", "durationHours": 24}'
-```
-
-### Record a Like
-
-```bash
-curl -X POST http://localhost:3000/api/users/your-user-id/like
-```
-
-### Check Monetization Status
-
-```bash
-curl http://localhost:3000/api/monetization/status/your-user-id
-```
-
-## Documentation
-
-For detailed API documentation, see [API.md](API.md)
+### Frontend
+- **Framework**: React Native with Expo
+- **Navigation**: React Navigation
+- **State Management**: React Context API
+- **Real-time**: Socket.IO Client
+- **Language**: TypeScript
 
 ## Project Structure
 
 ```
 glowing-raiz/
-├── src/
-│   ├── models/           # Data models
-│   │   ├── User.js
-│   │   ├── Boost.js
-│   │   ├── ProfileHighlight.js
-│   │   └── PremiumSubscription.js
-│   ├── services/         # Business logic
-│   │   ├── UserService.js
-│   │   └── MonetizationService.js
-│   ├── routes/           # API routes
-│   │   ├── users.js
-│   │   └── monetization.js
-│   ├── app.js            # Express app configuration
-│   └── server.js         # Server entry point
-├── tests/                # Test suite
-│   └── run-tests.js
-├── API.md               # API documentation
-├── README.md            # This file
-└── package.json         # Project dependencies
+├── backend/              # Node.js Express API
+│   ├── prisma/          # Database schema
+│   ├── src/
+│   │   ├── controllers/ # Route controllers
+│   │   ├── middleware/  # Auth & other middleware
+│   │   ├── routes/      # API routes
+│   │   ├── services/    # Business logic
+│   │   ├── utils/       # Utility functions
+│   │   └── index.ts     # Server entry point
+│   └── package.json
+├── frontend/            # React Native Expo app
+│   ├── src/
+│   │   ├── contexts/    # React contexts
+│   │   ├── navigation/  # Navigation setup
+│   │   ├── screens/     # App screens
+│   │   ├── services/    # API & Socket services
+│   │   └── types/       # TypeScript types
+│   ├── App.tsx
+│   └── package.json
+└── shared/              # Shared types
+    └── types/
 
 ```
 
-## Testing
+## Setup Instructions
 
-The project includes comprehensive tests covering:
-- User model and like limits
-- Premium boost functionality
-- Profile highlight functionality
-- Premium subscription (unlimited likes)
-- Service layer integration
-- End-to-end user journeys
+### Prerequisites
+- Node.js 18+ and npm
+- PostgreSQL 14+
+- Expo CLI (`npm install -g expo-cli`)
+- iOS Simulator (Mac) or Android Studio (for mobile development)
 
-All tests must pass before deployment.
+### Backend Setup
 
-## Architecture
+1. Navigate to the backend directory:
+```bash
+cd backend
+```
 
-### Models
-- **User**: User accounts with premium status and like limits
-- **Boost**: Temporary profile visibility boosts
-- **ProfileHighlight**: Featured profile placements
-- **PremiumSubscription**: Premium subscription management
+2. Install dependencies:
+```bash
+npm install
+```
 
-### Services
-- **UserService**: User management and like tracking
-- **MonetizationService**: All monetization features (boosts, highlights, premium)
+3. Set up environment variables:
+```bash
+cp .env.example .env
+```
 
-### Routes
-- **/api/users**: User management endpoints
-- **/api/monetization**: Monetization feature endpoints
+4. Edit `.env` and configure:
+   - `DATABASE_URL`: Your PostgreSQL connection string
+   - `JWT_SECRET`: A secure random string
+   - OAuth credentials (optional)
 
-## Technology Stack
+5. Set up the database:
+```bash
+npm run prisma:generate
+npm run prisma:push
+```
 
-- **Node.js**: Runtime environment
-- **Express**: Web framework
-- **UUID**: Unique identifier generation
+6. Start the development server:
+```bash
+npm run dev
+```
+
+The backend API will be available at `http://localhost:3000`
+
+### Frontend Setup
+
+1. Navigate to the frontend directory:
+```bash
+cd frontend
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Set up environment variables:
+```bash
+cp .env.example .env
+```
+
+4. Edit `.env` and configure API URLs to point to your backend
+
+5. Start the Expo development server:
+```bash
+npm start
+```
+
+6. Run on your preferred platform:
+   - Press `i` for iOS simulator
+   - Press `a` for Android emulator
+   - Scan QR code with Expo Go app on your device
+
+## API Endpoints
+
+### Authentication
+- `POST /api/auth/register` - Register new user
+- `POST /api/auth/login` - Login user
+- `GET /api/auth/me` - Get current user
+
+### Profile
+- `GET /api/profile/me` - Get own profile
+- `PUT /api/profile/me` - Update profile
+- `PUT /api/profile/me/location` - Update location
+- `GET /api/profile/:userId` - Get user profile
+
+### Discovery
+- `GET /api/discovery/nearby` - Get nearby users
+
+### Messages
+- `POST /api/messages` - Send message
+- `GET /api/messages/conversations` - Get all conversations
+- `GET /api/messages/conversations/:userId` - Get conversation with user
+- `PUT /api/messages/:messageId/seen` - Mark message as seen
+- `PUT /api/messages/conversations/:userId/seen` - Mark conversation as seen
+
+### Safety
+- `POST /api/safety/block/:userId` - Block user
+- `DELETE /api/safety/block/:userId` - Unblock user
+- `GET /api/safety/blocked` - Get blocked users
+- `POST /api/safety/report` - Report user
+
+### Admin
+- `GET /api/admin/users` - Get all users
+- `PUT /api/admin/users/:userId/suspend` - Suspend user
+- `PUT /api/admin/users/:userId/activate` - Activate user
+- `GET /api/admin/reports` - Get all reports
+- `PUT /api/admin/reports/:reportId/resolve` - Resolve report
+- `GET /api/admin/stats` - Get platform statistics
+
+## Socket.IO Events
+
+### Client → Server
+- `sendMessage` - Send a new message
+- `typing` - Send typing indicator
+- `messageSeen` - Mark message as seen
+
+### Server → Client
+- `newMessage` - Receive new message
+- `typing` - Receive typing indicator
+- `messageSeen` - Message seen notification
+
+## Development
+
+### Backend
+```bash
+cd backend
+npm run dev        # Start development server
+npm run build      # Build for production
+npm run start      # Start production server
+npm run lint       # Run ESLint
+```
+
+### Frontend
+```bash
+cd frontend
+npm start          # Start Expo dev server
+npm run android    # Run on Android
+npm run ios        # Run on iOS
+npm run web        # Run on web
+npm run lint       # Run ESLint
+```
+
+## Security Features
+
+- Password hashing with bcrypt
+- JWT token authentication
+- Rate limiting on API endpoints
+- Input validation with Zod
+- SQL injection protection via Prisma ORM
+- CORS configuration
+- Secure Socket.IO authentication
+
+## Future Enhancements
+
+- Photo upload functionality with cloud storage
+- Push notifications
+- Advanced matching algorithm
+- Video chat support
+- Super likes and premium features
+- Email verification
+- Password reset functionality
+- More detailed admin analytics
 
 ## License
 
-ISC 
+ISC
+
+## Contributing
+
+This is a demonstration project. For production use, additional security hardening, testing, and features should be implemented.

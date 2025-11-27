@@ -6,3 +6,38 @@ npm-debug.log
 coverage/
 .vscode/
 .idea/
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Environment variables
+.env
+*/.env
+
+# Build outputs
+dist/
+*/dist/
+build/
+*/build/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Expo
+.expo/
+.expo-shared/
+web-build/
+
+# Misc
+*.tgz
