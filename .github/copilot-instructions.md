@@ -96,7 +96,7 @@ npm run android          # Run on Android emulator
 
 - All database changes should go through Prisma migrations
 - Use indexed fields for frequently queried columns
-- Implement pagination for list endpoints (20-100 items per page)
+- Implement pagination for list endpoints (default 20 items per page, maximum 100)
 - Filter blocked users from discovery and message queries
 
 ## Testing Guidelines
